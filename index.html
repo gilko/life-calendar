@@ -475,14 +475,26 @@
 
   const campStart = new Date(2026, 7, 10), campEnd = new Date(2026, 7, 14);
 
+  // Ali — Milford YMCA, weekdays until school starts.
+  // Change this one date and the YMCA run adjusts automatically.
+  const SCHOOL_STARTS = new Date(2026, 7, 31);   // Mon Aug 31, 2026
+  const ymcaStart = new Date(2026, 6, 29);       // from today
+
   function eventsFor(date) {
     const out = (events[key(date)] || []).slice();
     if (date >= campStart && date <= campEnd) {
       out.unshift({ label: "Camp Ohiyesa (day camp) · Milford dog park", type: 'camp', people: ['alayna', 'jules'] });
     }
+    const dow = date.getDay();
+    if (date >= ymcaStart && date < SCHOOL_STARTS && dow >= 1 && dow <= 5) {
+      out.push({ label: "Milford YMCA", type: 'camp', people: ['ali'] });
+    }
+    if (sameDay(date, SCHOOL_STARTS)) {
+      out.push({ label: "First day of school 🎒", type: 'note', people: ['family'] });
+    }
     if (date >= new Date(2026, 6, 27)) {
-      if (date.getDay() === 1) out.push({ label: "Jules tutor 5–6 PM (virtual)", type: 'tutor', people: ['jules'] });
-      if (date.getDay() === 3) out.push({ label: "Jules tutor 5:30–6:30 PM (Brighton)", type: 'tutor', people: ['jules'] });
+      if (dow === 1) out.push({ label: "Jules tutor 5–6 PM (virtual)", type: 'tutor', people: ['jules'] });
+      if (dow === 3) out.push({ label: "Jules tutor 5:30–6:30 PM (Brighton)", type: 'tutor', people: ['jules'] });
     }
     return out.filter(e => passes(e.people));
   }
