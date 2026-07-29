@@ -494,7 +494,10 @@
     }
     const dow = date.getDay();
     if (date >= ymcaStart && date < SCHOOL_STARTS && dow >= 1 && dow <= 5) {
-      out.push({ label: "Milford YMCA", type: 'camp', people: ['ali'] });
+      // Alayna and Jules join Ali at the Y for this week only (Jul 27–31)
+      const allThree = date >= new Date(2026, 6, 27) && date <= new Date(2026, 6, 31);
+      out.push({ label: "Milford YMCA", type: 'camp',
+                 people: allThree ? ['ali', 'alayna', 'jules'] : ['ali'] });
     }
     if (sameDay(date, SCHOOL_STARTS)) {
       out.push({ label: "First day of school 🎒", type: 'note', people: ['family'] });
