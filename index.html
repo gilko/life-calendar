@@ -294,12 +294,12 @@
 -->
 <div class="filters" id="filters">
   <span class="flabel">Show:</span>
-  <button class="fchip p-family" data-person="family"><span class="dot" style="background:var(--color-lime)"></span>Family</button>
-  <button class="fchip p-gabe" data-person="gabe"><span class="dot" style="background:var(--color-powder-blue)"></span>Gabe</button>
-  <button class="fchip p-steph" data-person="steph"><span class="dot" style="background:var(--color-mint)"></span>Steph</button>
-  <button class="fchip p-jules" data-person="jules"><span class="dot" style="background:var(--color-blush)"></span>Jules</button>
-  <button class="fchip p-alayna" data-person="alayna"><span class="dot" style="background:var(--color-aqua)"></span>Alayna</button>
-  <button class="fchip p-ali" data-person="ali"><span class="dot" style="background:var(--color-lavender)"></span>Ali</button>
+  <button class="fchip p-family" data-person="family"><span class="dot" style="background:var(--color-lime)"></span>Family 👨‍👩‍👧‍👦</button>
+  <button class="fchip p-gabe" data-person="gabe"><span class="dot" style="background:var(--color-powder-blue)"></span>Gabe 🦁</button>
+  <button class="fchip p-steph" data-person="steph"><span class="dot" style="background:var(--color-mint)"></span>Steph 🐋</button>
+  <button class="fchip p-jules" data-person="jules"><span class="dot" style="background:var(--color-blush)"></span>Jules 🐕</button>
+  <button class="fchip p-alayna" data-person="alayna"><span class="dot" style="background:var(--color-aqua)"></span>Alayna 🦒</button>
+  <button class="fchip p-ali" data-person="ali"><span class="dot" style="background:var(--color-lavender)"></span>Ali 🐆</button>
   <span class="fhint">Tap to filter — select more than one to combine. No selection shows everything; Family items appear for every person.</span>
 </div>
 
@@ -361,12 +361,12 @@
 
   /* ------------------------------------------------------------------
      Ilko family — alias mapping (persisted; use when tagging events)
-       gabe   → aliases: dad, Gabriel
-       steph  → aliases: mom, Stephanie
-       jules  → aliases: Juliana
-       alayna → aliases: (none)
-       ali    → aliases: Alessandra
-       family → tag for items that are for everyone in the Ilko family
+       gabe   → aliases: dad, Gabriel      · emoji: 🦁 lion
+       steph  → aliases: mom, Stephanie    · emoji: 🐋 orca
+       jules  → aliases: Juliana           · emoji: 🐕 chihuahua
+       alayna → aliases: (none)            · emoji: 🦒 giraffe
+       ali    → aliases: Alessandra        · emoji: 🐆 cheetah
+       family → tag for items that are for everyone in the Ilko family · emoji: 👨‍👩‍👧‍👦
      Filtering: selecting people shows events tagged with any of them;
      'family'-tagged events are for everyone, so they show for any
      selection. No selection = show all.
@@ -374,7 +374,7 @@
   const events = {
     '2026-07-30': [{ label: "Ali's birthday 🎂", type: 'birthday', people: ['ali', 'family'] }],
     '2026-08-01': [
-      { label: "Alyssa's 13th bday — beach + sleepover 12:30 PM (Alayna & Jules)", type: 'kids', href: '#invite-alyssa', people: ['alayna', 'jules'] },
+      { label: "Alyssa's 13th bday — beach + sleepover 12:30 PM", type: 'kids', href: '#invite-alyssa', people: ['alayna', 'jules'] },
       { label: "Jamie in town w/ Leo & Sully — meet up", type: 'social', people: ['family'] },
     ],
     '2026-08-02': [
@@ -385,11 +385,14 @@
     '2026-08-03': [{ label: "Night before surgery — sitter arrives? hotel?", type: 'note', people: ['gabe', 'steph'] }],
     '2026-08-04': [{ label: "Hospital by 4:30 AM", type: 'surgery', people: ['steph', 'gabe'] }],
     '2026-08-06': [{ label: "Alayna's birthday 🎂", type: 'birthday', people: ['alayna', 'family'] }],
-    '2026-08-08': [{ label: "Stella's bday party @ Steve & Krissy's — sleepover (Alayna)", type: 'kids', people: ['alayna'] }],
-    '2026-08-15': [{ label: "Gianna's 10th bday beach party 2:30 PM + sleepover (Jules)", type: 'kids', href: '#invite-gianna', people: ['jules'] }],
+    '2026-08-08': [{ label: "Stella's bday party @ Steve & Krissy's — sleepover", type: 'kids', people: ['alayna'] }],
+    '2026-08-15': [{ label: "Gianna's 10th bday beach party 2:30 PM + sleepover", type: 'kids', href: '#invite-gianna', people: ['jules'] }],
     '2026-08-16': [{ label: "Jules home from Gianna's sleepover", type: 'kids', people: ['jules'] }],
     '2026-08-21': [{ label: "Gabe's birthday 🎂", type: 'birthday', people: ['gabe', 'family'] }],
   };
+
+  const EMOJI = { gabe: '🦁', steph: '🐋', jules: '🐕', alayna: '🦒', ali: '🐆', family: '👨‍👩‍👧‍👦' };
+  const tagEmoji = people => (people || []).map(p => EMOJI[p] || '').join('');
 
   const activeFilters = new Set();
   const passes = people => {
@@ -429,18 +432,18 @@
 
       const classes = [];
       const evts = eventsFor(date).map(e => e.href
-        ? `<a class="evt ${e.type}" href="${e.href}">${e.label}</a>`
-        : `<span class="evt ${e.type}">${e.label}</span>`);
+        ? `<a class="evt ${e.type}" href="${e.href}">${e.label} ${tagEmoji(e.people)}</a>`
+        : `<span class="evt ${e.type}">${e.label} ${tagEmoji(e.people)}</span>`);
 
       const stephVisible = passes(['steph']);
       if (sameDay(date, surgery) && stephVisible) {
         classes.push('surgery');
-        evts.unshift(`<span class="evt surgery">Steph — surgery</span>`);
+        evts.unshift(`<span class="evt surgery">Steph — surgery 🐋</span>`);
       } else if (date > surgery && date <= recoveryEnd && stephVisible) {
         classes.push('recovery');
         const weeks = Math.round((date - surgery) / (7 * 864e5));
         if (date.getDay() === 2 && sameDay(date, new Date(surgery.getTime() + weeks * 7 * 864e5))) {
-          evts.unshift(`<span class="evt milestone">Recovery wk ${weeks} ✓</span>`);
+          evts.unshift(`<span class="evt milestone">Recovery wk ${weeks} ✓ 🐋</span>`);
         }
       }
       if (date < TODAY) classes.push('past');
