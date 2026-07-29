@@ -109,7 +109,8 @@
     border: 1px solid var(--color-border); border-radius: var(--radius-pill);
     padding: 7px 14px; cursor: pointer;
   }
-  .fchip .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .fchip .emoji { font-size: 1.5em; line-height: 1; }
+  .evt .emoji { font-size: 1.5em; line-height: 1; vertical-align: -0.12em; }
   img.orca { width: 1.05em; height: 0.75em; vertical-align: -0.05em; object-fit: contain; }
   .fchip.active { border-color: var(--color-midnight); }
   .fchip.active.p-family { background: var(--color-lime); }
@@ -295,12 +296,12 @@
 -->
 <div class="filters" id="filters">
   <span class="flabel">Show:</span>
-  <button class="fchip p-family" data-person="family"><span class="dot" style="background:var(--color-lime)"></span>Family 👨‍👩‍👧‍👦</button>
-  <button class="fchip p-gabe" data-person="gabe"><span class="dot" style="background:var(--color-powder-blue)"></span>Gabe 🦁</button>
-  <button class="fchip p-steph" data-person="steph"><span class="dot" style="background:var(--color-mint)"></span>Steph 🫍</button>
-  <button class="fchip p-jules" data-person="jules"><span class="dot" style="background:var(--color-blush)"></span>Jules 🐕</button>
-  <button class="fchip p-alayna" data-person="alayna"><span class="dot" style="background:var(--color-aqua)"></span>Alayna 🦒</button>
-  <button class="fchip p-ali" data-person="ali"><span class="dot" style="background:var(--color-lavender)"></span>Ali 🐆</button>
+  <button class="fchip p-family" data-person="family">Family <span class="emoji">👨‍👩‍👧‍👦</span></button>
+  <button class="fchip p-gabe" data-person="gabe">Gabe <span class="emoji">🦁</span></button>
+  <button class="fchip p-steph" data-person="steph">Steph <span class="emoji">🫍</span></button>
+  <button class="fchip p-jules" data-person="jules">Jules <span class="emoji">🐕</span></button>
+  <button class="fchip p-alayna" data-person="alayna">Alayna <span class="emoji">🦒</span></button>
+  <button class="fchip p-ali" data-person="ali">Ali <span class="emoji">🐆</span></button>
   <span class="fhint">Tap to filter — select more than one to combine. No selection shows everything; Family items appear for every person.</span>
 </div>
 
@@ -422,11 +423,14 @@
 
   const ORCA = emojiRenders('🫍') ? '🫍' : ORCA_IMG;
   const EMOJI = { gabe: '🦁', steph: ORCA, jules: '🐕', alayna: '🦒', ali: '🐆', family: '👨‍👩‍👧‍👦' };
-  const tagEmoji = people => (people || []).map(p => EMOJI[p] || '').join('');
+  const tagEmoji = people => {
+    const e = (people || []).map(p => EMOJI[p] || '').join('');
+    return e ? `<span class="emoji">${e}</span>` : '';
+  };
 
   // Patch the static Steph filter chip with whichever orca we're using
   document.querySelector('.fchip.p-steph').innerHTML =
-    '<span class="dot" style="background:var(--color-mint)"></span>Steph ' + ORCA;
+    'Steph <span class="emoji">' + ORCA + '</span>';
 
   const activeFilters = new Set();
   const passes = people => {
