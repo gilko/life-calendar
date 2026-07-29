@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Life Calendar</title>
+<style>
+  :root {
+    --bg: #faf9f7;
+    --card: #ffffff;
+    --ink: #2d2a26;
+    --muted: #8a857d;
+    --line: #e8e5e0;
+    --surgery: #c2410c;
+    --surgery-bg: #ffedd5;
+    --recovery-bg: #e0f2f1;
+    --recovery-ink: #0f766e;
+    --birthday-ink: #be185d;
+    --birthday-bg: #fce7f3;
+    --kids-ink: #6d28d9;
+    --kids-bg: #ede9fe;
+    --tutor-ink: #1d4ed8;
+    --camp-ink: #15803d;
+    --camp-bg: #dcfce7;
+    --social-ink: #0e7490;
+    --urgent: #dc2626;
+    --urgent-bg: #fef2f2;
+    --action-ink: #92400e;
+    --action-bg: #fffbeb;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    padding: 24px 14px 48px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  header { margin-bottom: 20px; }
+  h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.01em; }
+  header p { color: var(--muted); margin-top: 4px; font-size: 0.95rem; }
+
+  .panel { border-radius: 14px; padding: 18px 20px; margin-bottom: 20px; }
+  .panel h2 {
+    font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+  }
+  .urgent-panel { background: var(--urgent-bg); border: 1px solid #fecaca; }
+  .urgent-panel h2 { color: var(--urgent); }
+  .urgent-panel h2::before { content: "⚠"; }
+  .actions-panel { background: var(--action-bg); border: 1px solid #fde68a; }
+  .actions-panel h2 { color: var(--action-ink); }
+  .actions-panel h2::before { content: "📋"; }
+
+  .check-item { display: flex; align-items: flex-start; gap: 12px; padding: 9px 0; border-top: 1px solid rgba(0,0,0,0.06); }
+  .check-item:first-of-type { border-top: none; }
+  .check-item input[type="checkbox"] { width: 21px; height: 21px; margin-top: 1px; cursor: pointer; flex-shrink: 0; }
+  .urgent-panel input[type="checkbox"] { accent-color: var(--urgent); }
+  .actions-panel input[type="checkbox"] { accent-color: var(--action-ink); }
+  .check-item label { cursor: pointer; line-height: 1.4; font-size: 0.95rem; }
+  .check-item .when { display: block; font-size: 0.83rem; color: var(--muted); margin-top: 2px; }
+  .check-item.done label { text-decoration: line-through; color: var(--muted); }
+  .badge {
+    display: inline-block; font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.06em; color: #fff; background: var(--urgent);
+    border-radius: 999px; padding: 2px 8px; margin-left: 8px; vertical-align: 1px;
+  }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; font-size: 0.83rem; color: var(--muted); }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .dot { width: 13px; height: 13px; border-radius: 4px; display: inline-block; }
+  .dot.surgery { background: var(--surgery-bg); border: 2px solid var(--surgery); }
+  .dot.recovery { background: var(--recovery-bg); border: 1px solid #99d3cd; }
+  .dot.birthday { background: var(--birthday-bg); border: 1px solid #f3a8cd; }
+  .dot.kids { background: var(--kids-bg); border: 1px solid #c4b5fd; }
+  .dot.camp { background: var(--camp-bg); border: 1px solid #86efac; }
+  .dot.tutor { background: #dbeafe; border: 1px solid #93c5fd; }
+
+  .months { display: grid; grid-template-columns: 1fr; gap: 28px; }
+  @media (min-width: 860px) { .months { grid-template-columns: 1fr 1fr; } }
+  .month {
+    background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+    padding: 18px 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .month h3 { text-align: center; font-size: 1.05rem; margin-bottom: 12px; }
+  table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  th { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); padding-bottom: 8px; font-weight: 600; }
+  td { min-height: 84px; height: 84px; vertical-align: top; border: 1px solid var(--line); padding: 3px; font-size: 0.78rem; }
+  td.empty { border: none; }
+  td.past { opacity: 0.45; }
+  .daynum { font-weight: 600; font-size: 0.78rem; }
+  td.recovery { background: var(--recovery-bg); }
+  td.surgery { background: var(--surgery-bg); outline: 2px solid var(--surgery); outline-offset: -2px; }
+  td.camp-day { background: var(--camp-bg); }
+  .evt { display: block; margin-top: 2px; font-size: 0.64rem; line-height: 1.25; font-weight: 600; border-radius: 4px; padding: 1px 3px; }
+  .evt.surgery { color: var(--surgery); }
+  .evt.birthday { color: var(--birthday-ink); background: var(--birthday-bg); }
+  .evt.cake { color: var(--birthday-ink); }
+  .evt.kids { color: var(--kids-ink); background: var(--kids-bg); }
+  .evt.camp { color: var(--camp-ink); }
+  .evt.tutor { color: var(--tutor-ink); font-weight: 500; }
+  .evt.social { color: var(--social-ink); background: #cffafe; }
+  .evt.note { color: var(--action-ink); background: #fef3c7; }
+  .evt.milestone { color: var(--recovery-ink); font-weight: 700; }
+  footer { margin-top: 24px; font-size: 0.8rem; color: var(--muted); text-align: center; line-height: 1.6; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Life Calendar</h1>
+  <p>July – September 2026 · Steph's surgery &amp; recovery, birthdays, camp, and kid logistics</p>
+</header>
+
+<section class="panel urgent-panel">
+  <h2>Urgent</h2>
+  <div class="check-item">
+    <input type="checkbox" id="u1">
+    <label for="u1">Order cake<span class="badge">Urgent</span>
+      <span class="when">Pickup Sunday, Aug 2 at 11:00 AM — for Ali's 1 PM party at Skyzone</span>
+    </label>
+  </div>
+  <div class="check-item">
+    <input type="checkbox" id="u2">
+    <label for="u2">Refill Juliana's prescription<span class="badge">Urgent</span>
+      <span class="when">As soon as possible</span>
+    </label>
+  </div>
+  <div class="check-item">
+    <input type="checkbox" id="u3">
+    <label for="u3">Line up childcare for surgery day (Tue Aug 4)
+      <span class="when">Hospital arrival 4:30 AM — ask if sitter can stay over Monday night Aug 3</span>
+    </label>
+  </div>
+</section>
+
+<section class="panel actions-panel">
+  <h2>Open actions &amp; decisions</h2>
+  <div class="check-item">
+    <input type="checkbox" id="a1">
+    <label for="a1">Decide: hotel near hospital the night before surgery (Mon Aug 3)?
+      <span class="when">Could leave Monday evening once the sitter arrives → more sleep before the 4:30 AM arrival</span>
+    </label>
+  </div>
+  <div class="check-item">
+    <input type="checkbox" id="a2">
+    <label for="a2">Reschedule Jules' fillings
+      <span class="when">Dentist offered Aug 6 — that's Alayna's birthday, so pick a different day</span>
+    </label>
+  </div>
+  <div class="check-item">
+    <input type="checkbox" id="a3">
+    <label for="a3">Pick a day for Alyssa's boat day + sleepover (Alayna's birthday celebration)</label>
+  </div>
+  <div class="check-item">
+    <input type="checkbox" id="a4">
+    <label for="a4">Confirm Alayna's ortho appointment
+      <span class="when">Date unknown — check when it was booked</span>
+    </label>
+  </div>
+  <div class="check-item">
+    <input type="checkbox" id="a5">
+    <label for="a5">Add TeamSnap cheer schedule to this calendar (Jules)</label>
+  </div>
+  <div class="check-item">
+    <input type="checkbox" id="a6">
+    <label for="a6">Merge Alayna's soccer schedule from Sprocket</label>
+  </div>
+</section>
+
+<div class="legend">
+  <span><span class="dot surgery"></span> Surgery</span>
+  <span><span class="dot recovery"></span> Recovery (6 wks)</span>
+  <span><span class="dot birthday"></span> Birthdays &amp; parties</span>
+  <span><span class="dot kids"></span> Kids — sleepovers</span>
+  <span><span class="dot camp"></span> YMCA camp week</span>
+  <span><span class="dot tutor"></span> Jules tutoring</span>
+</div>
+
+<div class="months" id="months"></div>
+
+<footer>
+  Surgery: Tue, Aug 4, 2026 (hospital by 4:30 AM) · Recovery through Tue, Sep 15, 2026 (6 weeks)<br>
+  Jules reading tutor: Mondays 5–6 PM virtual · Wednesdays 5:30–6:30 PM in person (Brighton)<br>
+  Camp Ohiyesa (Holly), Aug 10–14, day camp · drop-off &amp; pick-up at Milford dog park
+</footer>
+
+<script>
+  const TODAY = new Date(2026, 6, 29);
+  const surgery = new Date(2026, 7, 4);
+  const recoveryEnd = new Date(2026, 8, 15);
+  const sameDay = (a, b) => a.getTime() === b.getTime();
+  const key = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const dayNames = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+
+  // One-off events: date → list of {label, type}
+  const events = {
+    '2026-07-30': [{ label: "Ali's birthday 🎂", type: 'birthday' }],
+    '2026-08-01': [
+      { label: "J+A sleepover @ Alyssa & Gianna's · starts 12:30 PM", type: 'kids' },
+      { label: "Jamie in town w/ Leo & Sully — meet up", type: 'social' },
+    ],
+    '2026-08-02': [
+      { label: "Sleepover ends noon", type: 'kids' },
+      { label: "Cake pickup 11 AM", type: 'cake' },
+      { label: "Ali's party 1 PM · Skyzone Commerce", type: 'birthday' },
+    ],
+    '2026-08-03': [{ label: "Night before surgery — sitter arrives? hotel?", type: 'note' }],
+    '2026-08-04': [{ label: "Hospital by 4:30 AM", type: 'surgery' }],
+    '2026-08-06': [{ label: "Alayna's birthday 🎂", type: 'birthday' }],
+    '2026-08-08': [{ label: "Stella's bday party @ Steve & Krissy's — sleepover (Alayna)", type: 'kids' }],
+    '2026-08-15': [{ label: "Gianna's bday party + sleepover 2:30 PM (Jules)", type: 'kids' }],
+  };
+
+  const campStart = new Date(2026, 7, 10), campEnd = new Date(2026, 7, 14);
+
+  function eventsFor(date) {
+    const out = (events[key(date)] || []).slice();
+    // Camp week
+    if (date >= campStart && date <= campEnd) {
+      out.unshift({ label: "Camp Ohiyesa (day camp) · Milford dog park", type: 'camp' });
+    }
+    // Jules tutoring — recurring from this week on
+    if (date >= new Date(2026, 6, 27)) {
+      if (date.getDay() === 1) out.push({ label: "Jules tutor 5–6 PM (virtual)", type: 'tutor' });
+      if (date.getDay() === 3) out.push({ label: "Jules tutor 5:30–6:30 PM (Brighton)", type: 'tutor' });
+    }
+    return out;
+  }
+
+  function buildMonth(year, monthIdx) {
+    const first = new Date(year, monthIdx, 1);
+    const daysInMonth = new Date(year, monthIdx + 1, 0).getDate();
+    const monthName = first.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+
+    let html = `<div class="month"><h3>${monthName}</h3><table><thead><tr>`;
+    html += dayNames.map(d => `<th>${d}</th>`).join('');
+    html += `</tr></thead><tbody><tr>`;
+
+    for (let i = 0; i < first.getDay(); i++) html += `<td class="empty"></td>`;
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const date = new Date(year, monthIdx, d);
+      if (date.getDay() === 0 && d !== 1) html += `</tr><tr>`;
+
+      const classes = [];
+      const evts = eventsFor(date).map(e => `<span class="evt ${e.type}">${e.label}</span>`);
+
+      if (sameDay(date, surgery)) {
+        classes.push('surgery');
+        evts.unshift(`<span class="evt surgery">Steph — SURGERY</span>`);
+      } else if (date > surgery && date <= recoveryEnd) {
+        classes.push('recovery');
+        const weeks = Math.round((date - surgery) / (7 * 864e5));
+        if (date.getDay() === 2 && sameDay(date, new Date(surgery.getTime() + weeks * 7 * 864e5))) {
+          evts.unshift(`<span class="evt milestone">Recovery wk ${weeks} ✓</span>`);
+        }
+      }
+      if (date >= campStart && date <= campEnd) classes.push('camp-day');
+      if (date < TODAY) classes.push('past');
+
+      html += `<td class="${classes.join(' ')}"><span class="daynum">${d}</span>${evts.join('')}</td>`;
+    }
+
+    const last = new Date(year, monthIdx, daysInMonth);
+    for (let i = last.getDay(); i < 6; i++) html += `<td class="empty"></td>`;
+
+    html += `</tr></tbody></table></div>`;
+    return html;
+  }
+
+  document.getElementById('months').innerHTML =
+    buildMonth(2026, 6) + buildMonth(2026, 7) + buildMonth(2026, 8);
+
+  document.querySelectorAll('.check-item input').forEach(cb => {
+    cb.addEventListener('change', () => cb.closest('.check-item').classList.toggle('done', cb.checked));
+  });
+</script>
+</body>
+</html>
