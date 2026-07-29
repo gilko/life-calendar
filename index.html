@@ -207,6 +207,8 @@
   }
   .invite.alyssa .ribbon { background: var(--color-lavender); }
   .invite.gianna .ribbon { background: var(--color-aqua); }
+  .invite.denim .ribbon { background: var(--color-powder-blue); }
+  .invite.hattie .ribbon { background: var(--color-peach); }
   .invite h3 { font-family: var(--font-serif); font-size: 1.3rem; color: var(--color-midnight); margin-bottom: 8px; }
   .invite p { font-size: 0.95rem; margin: 4px 0; }
   .invite .label { font-weight: 600; color: var(--color-midnight); }
@@ -344,6 +346,30 @@
       <p><span class="label">Where:</span> 4344 Marcello Drive</p>
       <p class="rsvp"><a href="tel:7344977826">RSVP · 734-497-7826</a></p>
     </div>
+    <div class="invite denim" id="invite-denim">
+      <span class="ribbon">Sat, Aug 15 · Gabe &amp; Steph</span>
+      <h3>Denim &amp; Diamonds — The Brass Monkey</h3>
+      <p><span class="label">When:</span> Saturday, August 15 · starts 3:00 PM</p>
+      <p><span class="label">Where:</span> The Brass Monkey, Lake Sherwood</p>
+      <p><span class="label">Dress code:</span> Denim — or a denim bathing suit</p>
+      <p><span class="label">Bring:</span> BYOB</p>
+      <p><span class="label">Live music:</span> Y'All Band, 4:00–7:00 PM</p>
+      <p class="label" style="margin-top:10px">What to expect</p>
+      <ul>
+        <li>Swimming in the pool and hanging on the lake</li>
+        <li>Summer music and cold drinks</li>
+        <li>A mechanical bull</li>
+      </ul>
+      <p class="changed">⚠️ Same day as Gianna's party (Jules) — and Steph is ~11 days post-surgery</p>
+      <p><span class="label">RSVP:</span> Hosts asked for a head count</p>
+    </div>
+    <div class="invite hattie" id="invite-hattie">
+      <span class="ribbon">Sat, Aug 29 · Ali</span>
+      <h3>Hattie's 7th Birthday — Design Your Own Sweatshirt</h3>
+      <p><span class="label">When:</span> Saturday, August 29 · 11:00 AM–1:00 PM</p>
+      <p><span class="label">Where:</span> LovePeaceThreads Design Bar<br>344 N Main St, Suite 100, Milford, MI 48381</p>
+      <p><span class="label">Food:</span> Pizza and cake</p>
+    </div>
   </div>
 </section>
 
@@ -389,9 +415,13 @@
     '2026-08-04': [{ label: "Hospital by 4:30 AM", type: 'surgery', people: ['steph', 'gabe'] }],
     '2026-08-06': [{ label: "Alayna's birthday 🎂", type: 'birthday', people: ['alayna', 'family'] }],
     '2026-08-08': [{ label: "Stella's bday party @ Steve & Krissy's — sleepover", type: 'kids', people: ['alayna'] }],
-    '2026-08-15': [{ label: "Gianna's 10th bday beach party 2:30 PM + sleepover", type: 'kids', href: '#invite-gianna', people: ['jules'] }],
+    '2026-08-15': [
+      { label: "Gianna's 10th bday beach party 2:30 PM + sleepover", type: 'kids', href: '#invite-gianna', people: ['jules'] },
+      { label: "Denim & Diamonds 3 PM · Brass Monkey, Lake Sherwood", type: 'social', href: '#invite-denim', people: ['gabe', 'steph'] },
+    ],
     '2026-08-16': [{ label: "Jules home from Gianna's sleepover", type: 'kids', people: ['jules'] }],
     '2026-08-21': [{ label: "Gabe's birthday 🎂", type: 'birthday', people: ['gabe', 'family'] }],
+    '2026-08-29': [{ label: "Hattie's 7th bday 11 AM–1 PM · LovePeaceThreads, Milford", type: 'kids', href: '#invite-hattie', people: ['ali'] }],
   };
 
   // True orca 🫍 (U+1FABD, Unicode 17.0, 2025). Devices without Unicode 17
