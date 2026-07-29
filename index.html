@@ -100,6 +100,25 @@
     border-radius: var(--radius-pill); padding: 3px 10px; margin-left: 8px; vertical-align: 1px;
   }
 
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; }
+  .filters .flabel { font-size: 0.85rem; font-weight: 600; color: var(--color-slate); margin-right: 4px; }
+  .fchip {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-family: var(--font-sans); font-size: 0.85rem; font-weight: 600;
+    color: var(--color-midnight); background: var(--color-surface);
+    border: 1px solid var(--color-border); border-radius: var(--radius-pill);
+    padding: 7px 14px; cursor: pointer;
+  }
+  .fchip .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .fchip.active { border-color: var(--color-midnight); }
+  .fchip.active.p-family { background: var(--color-lime); }
+  .fchip.active.p-gabe { background: var(--color-powder-blue); }
+  .fchip.active.p-steph { background: var(--color-mint); }
+  .fchip.active.p-jules { background: var(--color-blush); }
+  .fchip.active.p-alayna { background: var(--color-aqua); }
+  .fchip.active.p-ali { background: var(--color-lavender); }
+  .filters .fhint { font-size: 0.78rem; color: var(--color-slate); width: 100%; }
+
   .legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
   .legend span {
     display: inline-flex; align-items: center; gap: 7px;
@@ -264,6 +283,26 @@
   </div>
 </section>
 
+<!--
+  Ilko family — alias mapping (canonical name → aliases)
+  Gabe   → dad, Gabriel
+  Steph  → mom, Stephanie
+  Jules  → Juliana
+  Alayna → (no aliases)
+  Ali    → Alessandra
+  family → items that are for everyone in the Ilko family
+-->
+<div class="filters" id="filters">
+  <span class="flabel">Show:</span>
+  <button class="fchip p-family" data-person="family"><span class="dot" style="background:var(--color-lime)"></span>Family</button>
+  <button class="fchip p-gabe" data-person="gabe"><span class="dot" style="background:var(--color-powder-blue)"></span>Gabe</button>
+  <button class="fchip p-steph" data-person="steph"><span class="dot" style="background:var(--color-mint)"></span>Steph</button>
+  <button class="fchip p-jules" data-person="jules"><span class="dot" style="background:var(--color-blush)"></span>Jules</button>
+  <button class="fchip p-alayna" data-person="alayna"><span class="dot" style="background:var(--color-aqua)"></span>Alayna</button>
+  <button class="fchip p-ali" data-person="ali"><span class="dot" style="background:var(--color-lavender)"></span>Ali</button>
+  <span class="fhint">Tap to filter — select more than one to combine. No selection shows everything; Family items appear for every person.</span>
+</div>
+
 <div class="legend">
   <span><span class="dot surgery"></span> Surgery</span>
   <span><span class="dot recovery"></span> Recovery (6 wks)</span>
@@ -320,24 +359,43 @@
   const key = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
   const dayNames = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
+  /* ------------------------------------------------------------------
+     Ilko family — alias mapping (persisted; use when tagging events)
+       gabe   → aliases: dad, Gabriel
+       steph  → aliases: mom, Stephanie
+       jules  → aliases: Juliana
+       alayna → aliases: (none)
+       ali    → aliases: Alessandra
+       family → tag for items that are for everyone in the Ilko family
+     Filtering: selecting people shows events tagged with any of them;
+     'family'-tagged events are for everyone, so they show for any
+     selection. No selection = show all.
+  ------------------------------------------------------------------ */
   const events = {
-    '2026-07-30': [{ label: "Ali's birthday 🎂", type: 'birthday' }],
+    '2026-07-30': [{ label: "Ali's birthday 🎂", type: 'birthday', people: ['ali', 'family'] }],
     '2026-08-01': [
-      { label: "Alyssa's 13th bday — beach + sleepover 12:30 PM (Alayna & Jules)", type: 'kids', href: '#invite-alyssa' },
-      { label: "Jamie in town w/ Leo & Sully — meet up", type: 'social' },
+      { label: "Alyssa's 13th bday — beach + sleepover 12:30 PM (Alayna & Jules)", type: 'kids', href: '#invite-alyssa', people: ['alayna', 'jules'] },
+      { label: "Jamie in town w/ Leo & Sully — meet up", type: 'social', people: ['family'] },
     ],
     '2026-08-02': [
-      { label: "Sleepover ends noon", type: 'kids' },
-      { label: "Cake pickup 11 AM", type: 'cake' },
-      { label: "Ali's party 1 PM · Skyzone Commerce", type: 'birthday' },
+      { label: "Sleepover ends noon", type: 'kids', people: ['alayna', 'jules'] },
+      { label: "Cake pickup 11 AM", type: 'cake', people: ['gabe', 'steph'] },
+      { label: "Ali's party 1 PM · Skyzone Commerce", type: 'birthday', people: ['ali', 'family'] },
     ],
-    '2026-08-03': [{ label: "Night before surgery — sitter arrives? hotel?", type: 'note' }],
-    '2026-08-04': [{ label: "Hospital by 4:30 AM", type: 'surgery' }],
-    '2026-08-06': [{ label: "Alayna's birthday 🎂", type: 'birthday' }],
-    '2026-08-08': [{ label: "Stella's bday party @ Steve & Krissy's — sleepover (Alayna)", type: 'kids' }],
-    '2026-08-15': [{ label: "Gianna's 10th bday beach party 2:30 PM + sleepover (Jules)", type: 'kids', href: '#invite-gianna' }],
-    '2026-08-16': [{ label: "Jules home from Gianna's sleepover", type: 'kids' }],
-    '2026-08-21': [{ label: "Gabe's birthday 🎂", type: 'birthday' }],
+    '2026-08-03': [{ label: "Night before surgery — sitter arrives? hotel?", type: 'note', people: ['gabe', 'steph'] }],
+    '2026-08-04': [{ label: "Hospital by 4:30 AM", type: 'surgery', people: ['steph', 'gabe'] }],
+    '2026-08-06': [{ label: "Alayna's birthday 🎂", type: 'birthday', people: ['alayna', 'family'] }],
+    '2026-08-08': [{ label: "Stella's bday party @ Steve & Krissy's — sleepover (Alayna)", type: 'kids', people: ['alayna'] }],
+    '2026-08-15': [{ label: "Gianna's 10th bday beach party 2:30 PM + sleepover (Jules)", type: 'kids', href: '#invite-gianna', people: ['jules'] }],
+    '2026-08-16': [{ label: "Jules home from Gianna's sleepover", type: 'kids', people: ['jules'] }],
+    '2026-08-21': [{ label: "Gabe's birthday 🎂", type: 'birthday', people: ['gabe', 'family'] }],
+  };
+
+  const activeFilters = new Set();
+  const passes = people => {
+    if (activeFilters.size === 0) return true;
+    if (!people || people.length === 0) return true;
+    return people.includes('family') || people.some(p => activeFilters.has(p));
   };
 
   const campStart = new Date(2026, 7, 10), campEnd = new Date(2026, 7, 14);
@@ -345,13 +403,13 @@
   function eventsFor(date) {
     const out = (events[key(date)] || []).slice();
     if (date >= campStart && date <= campEnd) {
-      out.unshift({ label: "Camp Ohiyesa (day camp) · Milford dog park", type: 'camp' });
+      out.unshift({ label: "Camp Ohiyesa (day camp) · Milford dog park", type: 'camp', people: ['alayna', 'jules'] });
     }
     if (date >= new Date(2026, 6, 27)) {
-      if (date.getDay() === 1) out.push({ label: "Jules tutor 5–6 PM (virtual)", type: 'tutor' });
-      if (date.getDay() === 3) out.push({ label: "Jules tutor 5:30–6:30 PM (Brighton)", type: 'tutor' });
+      if (date.getDay() === 1) out.push({ label: "Jules tutor 5–6 PM (virtual)", type: 'tutor', people: ['jules'] });
+      if (date.getDay() === 3) out.push({ label: "Jules tutor 5:30–6:30 PM (Brighton)", type: 'tutor', people: ['jules'] });
     }
-    return out;
+    return out.filter(e => passes(e.people));
   }
 
   function buildMonth(year, monthIdx) {
@@ -374,10 +432,11 @@
         ? `<a class="evt ${e.type}" href="${e.href}">${e.label}</a>`
         : `<span class="evt ${e.type}">${e.label}</span>`);
 
-      if (sameDay(date, surgery)) {
+      const stephVisible = passes(['steph']);
+      if (sameDay(date, surgery) && stephVisible) {
         classes.push('surgery');
         evts.unshift(`<span class="evt surgery">Steph — surgery</span>`);
-      } else if (date > surgery && date <= recoveryEnd) {
+      } else if (date > surgery && date <= recoveryEnd && stephVisible) {
         classes.push('recovery');
         const weeks = Math.round((date - surgery) / (7 * 864e5));
         if (date.getDay() === 2 && sameDay(date, new Date(surgery.getTime() + weeks * 7 * 864e5))) {
@@ -397,8 +456,20 @@
     return html;
   }
 
-  document.getElementById('months').innerHTML =
-    buildMonth(2026, 6) + buildMonth(2026, 7) + buildMonth(2026, 8);
+  function renderCalendar() {
+    document.getElementById('months').innerHTML =
+      buildMonth(2026, 6) + buildMonth(2026, 7) + buildMonth(2026, 8);
+  }
+  renderCalendar();
+
+  document.querySelectorAll('.fchip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const person = chip.dataset.person;
+      if (activeFilters.has(person)) { activeFilters.delete(person); chip.classList.remove('active'); }
+      else { activeFilters.add(person); chip.classList.add('active'); }
+      renderCalendar();
+    });
+  });
 
   document.querySelectorAll('.check-item input').forEach(cb => {
     cb.addEventListener('change', () => cb.closest('.check-item').classList.toggle('done', cb.checked));
