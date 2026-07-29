@@ -4,116 +4,174 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Life Calendar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Lora:wght@600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #faf9f7;
-    --card: #ffffff;
-    --ink: #2d2a26;
-    --muted: #8a857d;
-    --line: #e8e5e0;
-    --surgery: #c2410c;
-    --surgery-bg: #ffedd5;
-    --recovery-bg: #e0f2f1;
-    --recovery-ink: #0f766e;
-    --birthday-ink: #be185d;
-    --birthday-bg: #fce7f3;
-    --kids-ink: #6d28d9;
-    --kids-bg: #ede9fe;
-    --tutor-ink: #1d4ed8;
-    --camp-ink: #15803d;
-    --camp-bg: #dcfce7;
-    --social-ink: #0e7490;
-    --urgent: #dc2626;
-    --urgent-bg: #fef2f2;
-    --action-ink: #92400e;
-    --action-bg: #fffbeb;
+    /* Brand */
+    --color-midnight: #0C3348;
+    --color-lime: #B6E185;
+    --color-action: #2279AC;
+    /* Neutrals */
+    --color-canvas: #F8F7F2;
+    --color-surface: #FFFFFF;
+    --color-ink: #1E1E1A;
+    --color-slate: #626A6D;
+    --color-border: #E8ECEB;
+    /* Calendar pastels */
+    --color-blush: #F3CBC7;
+    --color-coral: #EFBCB6;
+    --color-mint: #D6ECD9;
+    --color-aqua: #C5E3E2;
+    --color-lavender: #E7D6DF;
+    --color-peach: #F5D6B5;
+    --color-butter: #F3E5A5;
+    --color-powder-blue: #C9DBEA;
+    /* Type */
+    --font-sans: "DM Sans", "Avenir Next", Avenir, Arial, sans-serif;
+    --font-serif: "Lora", Georgia, "Times New Roman", serif;
+    /* Radius */
+    --radius-sm: 10px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-pill: 999px;
+    /* Shadow */
+    --shadow-card:
+      0 2px 6px rgba(12, 51, 72, 0.05),
+      0 12px 32px rgba(12, 51, 72, 0.08);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background: var(--bg);
-    color: var(--ink);
-    padding: 24px 14px 48px;
-    max-width: 1100px;
+    font-family: var(--font-sans);
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    padding: 32px 16px 64px;
+    max-width: 1200px;
     margin: 0 auto;
+    line-height: 1.55;
   }
-  header { margin-bottom: 20px; }
-  h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.01em; }
-  header p { color: var(--muted); margin-top: 4px; font-size: 0.95rem; }
+  header { margin-bottom: 24px; }
+  h1 {
+    font-family: var(--font-serif);
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--color-midnight);
+    line-height: 1.08;
+  }
+  header p { color: var(--color-slate); margin-top: 6px; font-size: 1rem; }
 
-  .panel { border-radius: 14px; padding: 18px 20px; margin-bottom: 20px; }
+  .panel {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    padding: 24px;
+    margin-bottom: 24px;
+  }
   .panel h2 {
-    font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em;
-    margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-midnight);
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 10px;
   }
-  .urgent-panel { background: var(--urgent-bg); border: 1px solid #fecaca; }
-  .urgent-panel h2 { color: var(--urgent); }
-  .urgent-panel h2::before { content: "⚠"; }
-  .actions-panel { background: var(--action-bg); border: 1px solid #fde68a; }
-  .actions-panel h2 { color: var(--action-ink); }
-  .actions-panel h2::before { content: "📋"; }
+  .panel h2 .tag {
+    font-size: 0.75rem; font-weight: 600; font-family: var(--font-sans);
+    border-radius: var(--radius-pill); padding: 4px 12px;
+  }
+  .urgent-panel { background: #FBF3D2; border-color: #EFE2A8; }
+  .urgent-panel h2 .tag { background: var(--color-coral); color: var(--color-midnight); }
+  .actions-panel h2 .tag { background: var(--color-mint); color: var(--color-midnight); }
 
-  .check-item { display: flex; align-items: flex-start; gap: 12px; padding: 9px 0; border-top: 1px solid rgba(0,0,0,0.06); }
+  .check-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-top: 1px solid var(--color-border); }
   .check-item:first-of-type { border-top: none; }
-  .check-item input[type="checkbox"] { width: 21px; height: 21px; margin-top: 1px; cursor: pointer; flex-shrink: 0; }
-  .urgent-panel input[type="checkbox"] { accent-color: var(--urgent); }
-  .actions-panel input[type="checkbox"] { accent-color: var(--action-ink); }
-  .check-item label { cursor: pointer; line-height: 1.4; font-size: 0.95rem; }
-  .check-item .when { display: block; font-size: 0.83rem; color: var(--muted); margin-top: 2px; }
-  .check-item.done label { text-decoration: line-through; color: var(--muted); }
+  .check-item input[type="checkbox"] {
+    width: 22px; height: 22px; margin-top: 2px; cursor: pointer; flex-shrink: 0;
+    accent-color: var(--color-action);
+  }
+  .check-item label { cursor: pointer; font-size: 1rem; }
+  .check-item .when { display: block; font-size: 0.85rem; color: var(--color-slate); margin-top: 2px; }
+  .check-item.done label { text-decoration: line-through; color: var(--color-slate); }
   .badge {
-    display: inline-block; font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.06em; color: #fff; background: var(--urgent);
-    border-radius: 999px; padding: 2px 8px; margin-left: 8px; vertical-align: 1px;
+    display: inline-block; font-size: 0.72rem; font-weight: 600;
+    color: var(--color-midnight); background: var(--color-coral);
+    border-radius: var(--radius-pill); padding: 3px 10px; margin-left: 8px; vertical-align: 1px;
   }
 
-  .legend { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; font-size: 0.83rem; color: var(--muted); }
-  .legend span { display: inline-flex; align-items: center; gap: 6px; }
-  .dot { width: 13px; height: 13px; border-radius: 4px; display: inline-block; }
-  .dot.surgery { background: var(--surgery-bg); border: 2px solid var(--surgery); }
-  .dot.recovery { background: var(--recovery-bg); border: 1px solid #99d3cd; }
-  .dot.birthday { background: var(--birthday-bg); border: 1px solid #f3a8cd; }
-  .dot.kids { background: var(--kids-bg); border: 1px solid #c4b5fd; }
-  .dot.camp { background: var(--camp-bg); border: 1px solid #86efac; }
-  .dot.tutor { background: #dbeafe; border: 1px solid #93c5fd; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+  .legend span {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 0.82rem; font-weight: 500; color: var(--color-ink);
+    background: var(--color-surface); border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill); padding: 5px 12px;
+  }
+  .dot { width: 12px; height: 12px; border-radius: 4px; display: inline-block; }
+  .dot.surgery { background: var(--color-coral); }
+  .dot.recovery { background: var(--color-mint); }
+  .dot.birthday { background: var(--color-lavender); }
+  .dot.kids { background: var(--color-powder-blue); }
+  .dot.camp { background: var(--color-aqua); }
+  .dot.tutor { background: var(--color-lime); }
+  .dot.meal { background: var(--color-peach); }
+  .dot.note { background: var(--color-butter); }
 
-  .months { display: grid; grid-template-columns: 1fr; gap: 28px; }
-  @media (min-width: 860px) { .months { grid-template-columns: 1fr 1fr; } }
+  .months { display: grid; grid-template-columns: 1fr; gap: 24px; }
+  @media (min-width: 900px) { .months { grid-template-columns: 1fr 1fr; } }
   .month {
-    background: var(--card); border: 1px solid var(--line); border-radius: 16px;
-    padding: 18px 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    padding: 24px 16px;
   }
-  .month h3 { text-align: center; font-size: 1.05rem; margin-bottom: 12px; }
-  table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-  th { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); padding-bottom: 8px; font-weight: 600; }
-  td { min-height: 84px; height: 84px; vertical-align: top; border: 1px solid var(--line); padding: 3px; font-size: 0.78rem; }
-  td.empty { border: none; }
+  .month h3 {
+    font-family: var(--font-serif);
+    text-align: center; font-size: 1.35rem; font-weight: 700;
+    color: var(--color-midnight); margin-bottom: 16px;
+  }
+  table { width: 100%; border-collapse: separate; border-spacing: 3px; table-layout: fixed; }
+  th { font-size: 0.72rem; color: var(--color-slate); padding-bottom: 6px; font-weight: 600; }
+  td {
+    min-height: 86px; height: 86px; vertical-align: top;
+    background: var(--color-canvas);
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    padding: 5px;
+    font-size: 0.78rem;
+  }
+  td.empty { background: transparent; }
   td.past { opacity: 0.45; }
-  .daynum { font-weight: 600; font-size: 0.78rem; }
-  td.recovery { background: var(--recovery-bg); }
-  td.surgery { background: var(--surgery-bg); outline: 2px solid var(--surgery); outline-offset: -2px; }
-  td.camp-day { background: var(--camp-bg); }
-  .evt { display: block; margin-top: 2px; font-size: 0.64rem; line-height: 1.25; font-weight: 600; border-radius: 4px; padding: 1px 3px; }
-  .evt.surgery { color: var(--surgery); }
-  .evt.birthday { color: var(--birthday-ink); background: var(--birthday-bg); }
-  .evt.cake { color: var(--birthday-ink); }
-  .evt.kids { color: var(--kids-ink); background: var(--kids-bg); }
-  .evt.camp { color: var(--camp-ink); }
-  .evt.tutor { color: var(--tutor-ink); font-weight: 500; }
-  .evt.social { color: var(--social-ink); background: #cffafe; }
-  .evt.note { color: var(--action-ink); background: #fef3c7; }
-  .evt.milestone { color: var(--recovery-ink); font-weight: 700; }
-  footer { margin-top: 24px; font-size: 0.8rem; color: var(--muted); text-align: center; line-height: 1.6; }
+  td.today { border: 2px solid var(--color-action); }
+  .daynum { font-weight: 600; font-size: 0.78rem; color: var(--color-midnight); }
+  td.recovery { background: var(--color-mint); }
+  td.surgery { background: var(--color-coral); border: 2px solid var(--color-midnight); }
+  .evt {
+    display: block; margin-top: 3px; font-size: 0.63rem; line-height: 1.3; font-weight: 600;
+    color: var(--color-ink);
+    border-radius: 7px; padding: 2px 5px;
+  }
+  .evt.surgery { background: var(--color-coral); }
+  td.surgery .evt.surgery { background: transparent; padding-left: 0; color: var(--color-midnight); }
+  .evt.birthday { background: var(--color-lavender); }
+  .evt.cake { background: var(--color-peach); }
+  .evt.kids { background: var(--color-powder-blue); }
+  .evt.camp { background: var(--color-aqua); }
+  .evt.tutor { background: var(--color-lime); color: var(--color-midnight); font-weight: 500; }
+  .evt.social { background: var(--color-blush); }
+  .evt.note { background: var(--color-butter); }
+  .evt.milestone { background: transparent; color: var(--color-midnight); font-weight: 700; padding-left: 0; }
+  footer { margin-top: 32px; font-size: 0.85rem; color: var(--color-slate); text-align: center; line-height: 1.7; }
 </style>
 </head>
 <body>
 <header>
   <h1>Life Calendar</h1>
-  <p>July – September 2026 · Steph's surgery &amp; recovery, birthdays, camp, and kid logistics</p>
+  <p>One place for everything the family has going on · July – September 2026</p>
 </header>
 
 <section class="panel urgent-panel">
-  <h2>Urgent</h2>
+  <h2>Do these first <span class="tag">Urgent</span></h2>
   <div class="check-item">
     <input type="checkbox" id="u1">
     <label for="u1">Order cake<span class="badge">Urgent</span>
@@ -135,7 +193,7 @@
 </section>
 
 <section class="panel actions-panel">
-  <h2>Open actions &amp; decisions</h2>
+  <h2>Open actions &amp; decisions <span class="tag">To figure out</span></h2>
   <div class="check-item">
     <input type="checkbox" id="a1">
     <label for="a1">Decide: hotel near hospital the night before surgery (Mon Aug 3)?
@@ -172,8 +230,8 @@
   <span><span class="dot surgery"></span> Surgery</span>
   <span><span class="dot recovery"></span> Recovery (6 wks)</span>
   <span><span class="dot birthday"></span> Birthdays &amp; parties</span>
-  <span><span class="dot kids"></span> Kids — sleepovers</span>
-  <span><span class="dot camp"></span> YMCA camp week</span>
+  <span><span class="dot kids"></span> Sleepovers</span>
+  <span><span class="dot camp"></span> Camp week</span>
   <span><span class="dot tutor"></span> Jules tutoring</span>
 </div>
 
@@ -186,14 +244,14 @@
 </footer>
 
 <script>
-  const TODAY = new Date(2026, 6, 29);
+  const now = new Date();
+  const TODAY = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const surgery = new Date(2026, 7, 4);
   const recoveryEnd = new Date(2026, 8, 15);
   const sameDay = (a, b) => a.getTime() === b.getTime();
   const key = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
   const dayNames = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
-  // One-off events: date → list of {label, type}
   const events = {
     '2026-07-30': [{ label: "Ali's birthday 🎂", type: 'birthday' }],
     '2026-08-01': [
@@ -216,11 +274,9 @@
 
   function eventsFor(date) {
     const out = (events[key(date)] || []).slice();
-    // Camp week
     if (date >= campStart && date <= campEnd) {
       out.unshift({ label: "Camp Ohiyesa (day camp) · Milford dog park", type: 'camp' });
     }
-    // Jules tutoring — recurring from this week on
     if (date >= new Date(2026, 6, 27)) {
       if (date.getDay() === 1) out.push({ label: "Jules tutor 5–6 PM (virtual)", type: 'tutor' });
       if (date.getDay() === 3) out.push({ label: "Jules tutor 5:30–6:30 PM (Brighton)", type: 'tutor' });
@@ -248,7 +304,7 @@
 
       if (sameDay(date, surgery)) {
         classes.push('surgery');
-        evts.unshift(`<span class="evt surgery">Steph — SURGERY</span>`);
+        evts.unshift(`<span class="evt surgery">Steph — surgery</span>`);
       } else if (date > surgery && date <= recoveryEnd) {
         classes.push('recovery');
         const weeks = Math.round((date - surgery) / (7 * 864e5));
@@ -256,8 +312,8 @@
           evts.unshift(`<span class="evt milestone">Recovery wk ${weeks} ✓</span>`);
         }
       }
-      if (date >= campStart && date <= campEnd) classes.push('camp-day');
       if (date < TODAY) classes.push('past');
+      if (sameDay(date, TODAY)) classes.push('today');
 
       html += `<td class="${classes.join(' ')}"><span class="daynum">${d}</span>${evts.join('')}</td>`;
     }
