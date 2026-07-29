@@ -42,6 +42,7 @@
       0 12px 32px rgba(12, 51, 72, 0.08);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
   body {
     font-family: var(--font-sans);
     background: var(--color-canvas);
@@ -161,6 +162,43 @@
   .evt.social { background: var(--color-blush); }
   .evt.note { background: var(--color-butter); }
   .evt.milestone { background: transparent; color: var(--color-midnight); font-weight: 700; padding-left: 0; }
+  a.evt { text-decoration: none; cursor: pointer; }
+  a.evt::after { content: " ↗"; font-size: 0.6rem; color: var(--color-action); }
+
+  /* Invitations */
+  .invites { margin-top: 32px; }
+  .invites > h2 {
+    font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700;
+    color: var(--color-midnight); margin-bottom: 16px;
+  }
+  .invite-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+  @media (min-width: 720px) { .invite-grid { grid-template-columns: 1fr 1fr; } }
+  .invite {
+    background: var(--color-surface); border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg); box-shadow: var(--shadow-card);
+    padding: 24px; scroll-margin-top: 16px;
+  }
+  .invite .ribbon {
+    display: inline-block; font-size: 0.75rem; font-weight: 600;
+    border-radius: var(--radius-pill); padding: 4px 12px; margin-bottom: 10px;
+    color: var(--color-midnight);
+  }
+  .invite.alyssa .ribbon { background: var(--color-lavender); }
+  .invite.gianna .ribbon { background: var(--color-aqua); }
+  .invite h3 { font-family: var(--font-serif); font-size: 1.3rem; color: var(--color-midnight); margin-bottom: 8px; }
+  .invite p { font-size: 0.95rem; margin: 4px 0; }
+  .invite .label { font-weight: 600; color: var(--color-midnight); }
+  .invite .changed {
+    background: var(--color-butter); border-radius: var(--radius-sm);
+    padding: 6px 10px; font-size: 0.85rem; margin: 10px 0; display: inline-block;
+  }
+  .invite ul { margin: 6px 0 0 20px; font-size: 0.92rem; }
+  .invite .rsvp { margin-top: 12px; }
+  .invite .rsvp a {
+    display: inline-block; background: var(--color-midnight); color: #FFFFFF;
+    border-radius: var(--radius-pill); padding: 10px 20px; font-weight: 600;
+    font-size: 0.9rem; text-decoration: none;
+  }
   footer { margin-top: 32px; font-size: 0.85rem; color: var(--color-slate); text-align: center; line-height: 1.7; }
 </style>
 </head>
@@ -237,6 +275,36 @@
 
 <div class="months" id="months"></div>
 
+<section class="invites" id="invitations">
+  <h2>Invitations</h2>
+  <div class="invite-grid">
+    <div class="invite alyssa" id="invite-alyssa">
+      <span class="ribbon">Sat, Aug 1 · Alayna &amp; Jules</span>
+      <h3>Alyssa's 13th Birthday Party</h3>
+      <p><span class="label">When:</span> Saturday, August 1 · 12:30 PM</p>
+      <p><span class="label">What:</span> Sleepover and beach party (ends noon Sunday)</p>
+      <p><span class="label">Where:</span> 4344 Marcello Drive</p>
+      <p class="label" style="margin-top:10px">Gift ideas</p>
+      <ul>
+        <li>Tree Hut body scrubs</li>
+        <li>Sol de Janeiro</li>
+        <li>Nedohs</li>
+        <li>Charlotte Tilbury setting spray or powder</li>
+      </ul>
+      <p class="rsvp"><a href="tel:7344977826">RSVP · 734-497-7826</a></p>
+    </div>
+    <div class="invite gianna" id="invite-gianna">
+      <span class="ribbon">Sat, Aug 15 · Jules only</span>
+      <h3>Gianna's 10th Birthday Beach Party</h3>
+      <p class="changed">📅 Date changed: now Saturday, August 15 (was Aug 22)</p>
+      <p><span class="label">When:</span> Saturday, August 15 · 2:30–6:00 PM</p>
+      <p><span class="label">Bring:</span> Bathing suit and towel</p>
+      <p><span class="label">Where:</span> 4344 Marcello Drive</p>
+      <p class="rsvp"><a href="tel:7344977826">RSVP · 734-497-7826</a></p>
+    </div>
+  </div>
+</section>
+
 <footer>
   Surgery: Tue, Aug 4, 2026 (hospital by 4:30 AM) · Recovery through Tue, Sep 15, 2026 (6 weeks)<br>
   Jules reading tutor: Mondays 5–6 PM virtual · Wednesdays 5:30–6:30 PM in person (Brighton)<br>
@@ -255,7 +323,7 @@
   const events = {
     '2026-07-30': [{ label: "Ali's birthday 🎂", type: 'birthday' }],
     '2026-08-01': [
-      { label: "J+A sleepover @ Alyssa & Gianna's · starts 12:30 PM", type: 'kids' },
+      { label: "Alyssa's 13th bday — beach + sleepover 12:30 PM (Alayna & Jules)", type: 'kids', href: '#invite-alyssa' },
       { label: "Jamie in town w/ Leo & Sully — meet up", type: 'social' },
     ],
     '2026-08-02': [
@@ -267,7 +335,8 @@
     '2026-08-04': [{ label: "Hospital by 4:30 AM", type: 'surgery' }],
     '2026-08-06': [{ label: "Alayna's birthday 🎂", type: 'birthday' }],
     '2026-08-08': [{ label: "Stella's bday party @ Steve & Krissy's — sleepover (Alayna)", type: 'kids' }],
-    '2026-08-15': [{ label: "Gianna's bday party + sleepover 2:30 PM (Jules)", type: 'kids' }],
+    '2026-08-15': [{ label: "Gianna's 10th bday beach party 2:30–6 PM (Jules)", type: 'kids', href: '#invite-gianna' }],
+    '2026-08-21': [{ label: "Gabe's birthday 🎂", type: 'birthday' }],
   };
 
   const campStart = new Date(2026, 7, 10), campEnd = new Date(2026, 7, 14);
@@ -300,7 +369,9 @@
       if (date.getDay() === 0 && d !== 1) html += `</tr><tr>`;
 
       const classes = [];
-      const evts = eventsFor(date).map(e => `<span class="evt ${e.type}">${e.label}</span>`);
+      const evts = eventsFor(date).map(e => e.href
+        ? `<a class="evt ${e.type}" href="${e.href}">${e.label}</a>`
+        : `<span class="evt ${e.type}">${e.label}</span>`);
 
       if (sameDay(date, surgery)) {
         classes.push('surgery');
