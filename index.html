@@ -28,6 +28,7 @@
     --color-peach: #F5D6B5;
     --color-butter: #F3E5A5;
     --color-powder-blue: #C9DBEA;
+    --color-periwinkle: #D8D4EE;
     /* Type */
     --font-sans: "DM Sans", "Avenir Next", Avenir, Arial, sans-serif;
     --font-serif: "Lora", Georgia, "Times New Roman", serif;
@@ -136,6 +137,7 @@
   .dot.kids { background: var(--color-powder-blue); }
   .dot.camp { background: var(--color-aqua); }
   .dot.tutor { background: var(--color-lime); }
+  .dot.cheer { background: var(--color-periwinkle); }
   .dot.meal { background: var(--color-peach); }
   .dot.note { background: var(--color-butter); }
 
@@ -181,6 +183,7 @@
   .evt.kids { background: var(--color-powder-blue); }
   .evt.camp { background: var(--color-aqua); }
   .evt.tutor { background: var(--color-lime); color: var(--color-midnight); font-weight: 500; }
+  .evt.cheer { background: var(--color-periwinkle); color: var(--color-midnight); font-weight: 500; }
   .evt.social { background: var(--color-blush); }
   .evt.note { background: var(--color-butter); }
   .evt.milestone { background: transparent; color: var(--color-midnight); font-weight: 700; padding-left: 0; }
@@ -316,6 +319,7 @@
   <span><span class="dot kids"></span> Sleepovers</span>
   <span><span class="dot camp"></span> Camp week</span>
   <span><span class="dot tutor"></span> Jules tutoring</span>
+  <span><span class="dot cheer"></span> Jules cheer</span>
 </div>
 
 <div class="months" id="months"></div>
@@ -386,6 +390,7 @@
 <footer>
   Surgery: Tue, Aug 4, 2026 (hospital by 4:30 AM) · Recovery through Tue, Sep 15, 2026 (6 weeks)<br>
   Jules reading tutor: Mondays 5–6 PM virtual · Wednesdays 5:30–6:30 PM in person (Brighton)<br>
+  Jules cheer practice: Monday–Thursday, 6–9 PM<br>
   Camp Ohiyesa (Holly), Aug 10–14, day camp · drop-off &amp; pick-up at Milford dog park
 </footer>
 
@@ -501,6 +506,11 @@
   const SCHOOL_STARTS = new Date(2026, 7, 31);   // Mon Aug 31, 2026
   const ymcaStart = new Date(2026, 6, 29);       // from today
 
+  // Jules — cheer practice, Mon–Thu 6–9 PM.
+  // Start/end are placeholders until the TeamSnap schedule lands — change these two.
+  const CHEER_START = new Date(2026, 7, 3);      // Mon Aug 3, 2026
+  const CHEER_END   = new Date(2026, 8, 30);     // Wed Sep 30, 2026
+
   function eventsFor(date) {
     const out = (events[key(date)] || []).slice();
     if (date >= campStart && date <= campEnd) {
@@ -519,6 +529,10 @@
     if (date >= new Date(2026, 6, 27)) {
       if (dow === 1) out.push({ label: "Jules tutor 5–6 PM (virtual)", type: 'tutor', people: ['jules'] });
       if (dow === 3) out.push({ label: "Jules tutor 5:30–6:30 PM (Brighton)", type: 'tutor', people: ['jules'] });
+    }
+    // Jules — cheer practice, Mon–Thu 6–9 PM. Adjust CHEER_START / CHEER_END to reflow.
+    if (date >= CHEER_START && date <= CHEER_END && dow >= 1 && dow <= 4) {
+      out.push({ label: "Jules cheer 6–9 PM", type: 'cheer', people: ['jules'] });
     }
     return out.filter(e => passes(e.people));
   }
