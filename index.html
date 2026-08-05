@@ -397,7 +397,7 @@
 
 <footer>
   Surgery: Tue, Aug 4, 2026 (hospital by 4:30 AM) · Recovery through Tue, Sep 15, 2026 (6 weeks)<br>
-  Jules reading tutor: regular Mon/Wed sessions paused (tutor recovering from surgery) · online only: Wed 8/5 10 AM, Wed 8/19 11 AM, Wed 8/26 11 AM<br>
+  Jules reading tutor: online only in August (Wed 8/5 10 AM, 8/19 11 AM, 8/26 11 AM) · Mondays 5–6 PM virtual resume when school starts (Aug 31)<br>
   Jules cheer practice: Mon–Thu 6–9 PM over summer · Tue–Thu 6–9 PM once school starts (Aug 31)<br>
   Camp Ohiyesa (Holly), Aug 10–14, day camp · drop-off &amp; pick-up at Milford dog park
 </footer>
@@ -538,6 +538,10 @@
       out.push({ label: "First day of school 🎒", type: 'note', people: ['family'] });
     }
     // Recurring Mon/Wed tutoring paused as of Aug 5, 2026 — one-off online sessions are in `events` instead.
+    // Mondays resume once school starts (cheer moves to Tue–Thu, so Monday evenings are free again).
+    if (date >= SCHOOL_STARTS && dow === 1) {
+      out.push({ label: "Jules tutor 5–6 PM (virtual)", type: 'tutor', people: ['jules'] });
+    }
     // Jules — cheer practice 6–9 PM: Mon–Thu over summer, Tue–Thu once school starts (Mondays open back up). Adjust CHEER_START / CHEER_END to reflow.
     const cheerDay = date < SCHOOL_STARTS ? (dow >= 1 && dow <= 4) : (dow >= 2 && dow <= 4);
     if (date >= CHEER_START && date <= CHEER_END && cheerDay) {
