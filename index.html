@@ -190,6 +190,40 @@
   a.evt { text-decoration: none; cursor: pointer; }
   a.evt::after { content: " ↗"; font-size: 0.6rem; color: var(--color-action); }
 
+  /* Expanded day view */
+  td.has-events { cursor: pointer; }
+  .day-overlay {
+    position: fixed; inset: 0; z-index: 50;
+    background: rgba(12, 51, 72, 0.45);
+    display: none; align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .day-overlay.open { display: flex; }
+  .day-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    padding: 24px;
+    width: min(440px, 100%);
+    max-height: 80vh; overflow-y: auto;
+  }
+  .day-card h4 {
+    font-family: var(--font-serif);
+    font-size: 1.25rem; font-weight: 700;
+    color: var(--color-midnight);
+    margin-bottom: 12px;
+  }
+  .day-card .evt {
+    font-size: 0.95rem; line-height: 1.4;
+    padding: 10px 14px; margin-top: 10px;
+    border-radius: 12px;
+  }
+  .day-card .evt.milestone, .day-card .evt.surgery { padding-left: 14px; }
+  .day-card .hint {
+    margin-top: 14px; font-size: 0.72rem; color: var(--color-slate); text-align: center;
+  }
+
   /* Invitations */
   .invites { margin-top: 32px; }
   .invites > h2 {
@@ -590,8 +624,10 @@
       }
       if (date < TODAY) classes.push('past');
       if (sameDay(date, TODAY)) classes.push('today');
+      if (evts.length) classes.push('has-events');
 
-      html += `<td class="${classes.join(' ')}"><span class="daynum">${d}</span>${evts.join('')}</td>`;
+      const iso = `${year}-${String(monthIdx + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      html += `<td class="${classes.join(' ')}" data-date="${iso}"><span class="daynum">${d}</span>${evts.join('')}</td>`;
     }
 
     const last = new Date(year, monthIdx, daysInMonth);
@@ -619,6 +655,33 @@
   document.querySelectorAll('.check-item input').forEach(cb => {
     cb.addEventListener('change', () => cb.closest('.check-item').classList.toggle('done', cb.checked));
   });
+
+  // Tap a day to expand it; tap outside the card to close
+  const dayOverlay = document.createElement('div');
+  dayOverlay.className = 'day-overlay';
+  dayOverlay.innerHTML = '<div class="day-card"><h4></h4><div class="day-evts"></div><div class="hint">Tap outside to close</div></div>';
+  document.body.appendChild(dayOverlay);
+
+  function closeDay() { dayOverlay.classList.remove('open'); }
+
+  document.getElementById('months').addEventListener('click', (e) => {
+    if (e.target.closest('a.evt')) return; // invite links keep working from the grid
+    const td = e.target.closest('td[data-date]');
+    if (!td || !td.querySelector('.evt')) return;
+    const date = new Date(td.dataset.date + 'T12:00:00');
+    dayOverlay.querySelector('h4').textContent =
+      date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+    const holder = dayOverlay.querySelector('.day-evts');
+    holder.innerHTML = '';
+    td.querySelectorAll('.evt').forEach(ev => holder.appendChild(ev.cloneNode(true)));
+    dayOverlay.classList.add('open');
+  });
+
+  dayOverlay.addEventListener('click', (e) => {
+    if (e.target.closest('a.evt')) { closeDay(); return; } // follow invite link, then close
+    if (!e.target.closest('.day-card')) closeDay();
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDay(); });
 </script>
 </body>
 </html>
