@@ -82,8 +82,6 @@
     font-size: 0.75rem; font-weight: 600; font-family: var(--font-sans);
     border-radius: var(--radius-pill); padding: 4px 12px;
   }
-  .urgent-panel { background: #FBF3D2; border-color: #EFE2A8; }
-  .urgent-panel h2 .tag { background: var(--color-coral); color: var(--color-midnight); }
   .actions-panel h2 .tag { background: var(--color-mint); color: var(--color-midnight); }
 
   .check-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-top: 1px solid var(--color-border); }
@@ -242,11 +240,9 @@
     border-radius: var(--radius-pill); padding: 4px 12px; margin-bottom: 10px;
     color: var(--color-midnight);
   }
-  .invite.alyssa .ribbon { background: var(--color-lavender); }
   .invite.gianna .ribbon { background: var(--color-aqua); }
   .invite.denim .ribbon { background: var(--color-powder-blue); }
   .invite.hattie .ribbon { background: var(--color-peach); }
-  .invite.ryen .ribbon { background: var(--color-butter); }
   .invite h3 { font-family: var(--font-serif); font-size: 1.3rem; color: var(--color-midnight); margin-bottom: 8px; }
   .invite p { font-size: 0.95rem; margin: 4px 0; }
   .invite .label { font-weight: 600; color: var(--color-midnight); }
@@ -270,30 +266,9 @@
   <p>One place for everything the family has going on · July – September 2026</p>
 </header>
 
-<section class="panel urgent-panel">
-  <h2>Do these first <span class="tag">Urgent</span></h2>
-  <div class="check-item">
-    <input type="checkbox" id="u0">
-    <label for="u0">Meijer run today — for Ali's actual birthday tomorrow<span class="badge">Today</span>
-      <span class="when">Small cake · ice cream · wrapping paper · tape.</span>
-    </label>
-  </div>
-  <div class="check-item">
-    <input type="checkbox" id="u1">
-    <label for="u1">Pick up the party cake<span class="badge">Tomorrow</span>
-      <span class="when">Sunday, Aug 2 at 11:00 AM — ordered. Alayna &amp; Jules need pickup from Alyssa's at noon and Ali's party starts at 1 PM, so send one parent for the cake and the other for the girls.</span>
-    </label>
-  </div>
-</section>
 
 <section class="panel actions-panel">
   <h2>Open actions &amp; decisions <span class="tag">To figure out</span></h2>
-  <div class="check-item">
-    <input type="checkbox" id="a1">
-    <label for="a1">Decide: hotel near hospital the night before surgery (Mon Aug 3)?
-      <span class="when">Could leave Monday evening once the sitter arrives → more sleep before the 4:30 AM arrival</span>
-    </label>
-  </div>
   <div class="check-item">
     <input type="checkbox" id="a2">
     <label for="a2">Reschedule Jules' fillings
@@ -315,10 +290,6 @@
     <label for="a5">Add TeamSnap cheer schedule to this calendar (Jules)
       <span class="when">Mon–Thu 6–9 PM is in — still need the real start and end dates (Wednesday tutoring overlap resolved: sessions moved to daytime online)</span>
     </label>
-  </div>
-  <div class="check-item">
-    <input type="checkbox" id="a6">
-    <label for="a6">Merge Alayna's soccer schedule from Sprocket</label>
   </div>
   <div class="check-item">
     <input type="checkbox" id="a7">
@@ -369,21 +340,6 @@
 <section class="invites" id="invitations">
   <h2>Invitations</h2>
   <div class="invite-grid">
-    <div class="invite alyssa" id="invite-alyssa">
-      <span class="ribbon">Sat, Aug 1 · Alayna &amp; Jules</span>
-      <h3>Alyssa's 13th Birthday Party</h3>
-      <p><span class="label">When:</span> Saturday, August 1 · 12:30 PM</p>
-      <p><span class="label">What:</span> Sleepover and beach party (ends noon Sunday)</p>
-      <p><span class="label">Where:</span> 4344 Marcello Drive</p>
-      <p class="label" style="margin-top:10px">Gift ideas</p>
-      <ul>
-        <li>Tree Hut body scrubs</li>
-        <li>Sol de Janeiro</li>
-        <li>Nedohs</li>
-        <li>Charlotte Tilbury setting spray or powder</li>
-      </ul>
-      <p class="rsvp"><a href="tel:7344977826">RSVP · 734-497-7826</a></p>
-    </div>
     <div class="invite gianna" id="invite-gianna">
       <span class="ribbon">Sat, Aug 15 · Jules only</span>
       <h3>Gianna's 10th Birthday Beach Party</h3>
@@ -409,15 +365,6 @@
       </ul>
       <p class="changed">⚠️ Same day as Gianna's party (Jules) — and Steph is ~11 days post-surgery</p>
       <p><span class="label">RSVP:</span> Hosts asked for a head count</p>
-    </div>
-    <div class="invite ryen" id="invite-ryen-harper">
-      <span class="ribbon">Sun, Aug 2 · Jules &amp; Ali</span>
-      <h3>Ryen's 9th &amp; Harper's 10th — Magical Carnival Party</h3>
-      <p><span class="label">When:</span> Sunday, August 2 · 2:00 PM</p>
-      <p><span class="label">Where:</span> 5443 Leafwood Drive, Commerce</p>
-      <p><span class="label">What:</span> Food, games and fun — cotton candy, popcorn, magic</p>
-      <p class="changed">⚠️ Clashes with Ali's own party at Skyzone Commerce, 1 PM the same day</p>
-      <p class="rsvp"><a href="tel:2485351122">RSVP to Meg · 248-535-1122</a></p>
     </div>
     <div class="invite hattie" id="invite-hattie">
       <span class="ribbon">Sat, Aug 29 · Ali</span>
@@ -462,14 +409,14 @@
     '2026-07-30': [{ label: "Ali's birthday 🎂", type: 'birthday', people: ['ali', 'family'] }],
     '2026-07-31': [{ label: "Play date with Isla 4:30 PM · Central Park playground, downtown Milford", type: 'social', people: ['ali'] }],
     '2026-08-01': [
-      { label: "Alyssa's 13th bday — beach + sleepover 12:30 PM", type: 'kids', href: '#invite-alyssa', people: ['alayna', 'jules'] },
+      { label: "Alyssa's 13th bday — beach + sleepover 12:30 PM", type: 'kids', people: ['alayna', 'jules'] },
       { label: "Jamie in town w/ Leo & Sully — meet up", type: 'social', people: ['family'] },
     ],
     '2026-08-02': [
       { label: "Sleepover ends noon", type: 'kids', people: ['alayna', 'jules'] },
       { label: "Cake pickup 11 AM", type: 'cake', people: ['gabe', 'steph'] },
       { label: "Ali's party 1 PM · Skyzone Commerce", type: 'birthday', people: ['ali', 'family'] },
-      { label: "⚠️ Ryen (9) & Harper (10) carnival 2 PM · Commerce", type: 'kids', href: '#invite-ryen-harper', people: ['jules', 'ali'] },
+      { label: "⚠️ Ryen (9) & Harper (10) carnival 2 PM · Commerce", type: 'kids', people: ['jules', 'ali'] },
     ],
     '2026-08-03': [
       { label: "Jules physical @ urgent care — required before first cheer practice", type: 'note', people: ['jules'] },
