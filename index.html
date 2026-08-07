@@ -492,7 +492,6 @@
       { label: "Munk Orthodontics 12:30 PM · Clarkston", type: 'note', people: ['alayna', 'jules'] },
       { label: "Munk Orthodontics 2:00 PM · Clarkston", type: 'note', people: ['alayna', 'jules'] },
     ],
-    '2026-08-12': [{ label: "Soccer practice 5–6:30 PM · Hickory Ridge (arrive 4:45)", type: 'kids', people: ['alayna'] }],
     '2026-08-13': [
       { label: "Soccer preseason scrimmage 5–6 PM · Hickory Ridge (arrive 4:45)", type: 'kids', people: ['alayna'] },
       { label: "Preseason tailgate after scrimmage · Hickory Ridge", type: 'social', people: ['alayna', 'family'] },
@@ -502,11 +501,9 @@
       { label: "Denim & Diamonds 3 PM · Brass Monkey, Lake Sherwood", type: 'social', href: '#invite-denim', people: ['gabe', 'steph'] },
     ],
     '2026-08-16': [{ label: "Jules home from Gianna's sleepover", type: 'kids', people: ['jules'] }],
-    '2026-08-17': [{ label: "Soccer practice 5–6:30 PM · location TBD (arrive 4:45)", type: 'kids', people: ['alayna'] }],
     '2026-08-19': [
       { label: "Jules tutor 11 AM (online)", type: 'tutor', people: ['jules'] },
       { label: "Jules well visit 3:30 PM · Dr. Steumba", type: 'note', people: ['jules'] },
-      { label: "Soccer practice 5–6:30 PM · location TBD (arrive 4:45)", type: 'kids', people: ['alayna'] },
     ],
     '2026-08-21': [
       { label: "Gabe's birthday 🎂", type: 'birthday', people: ['gabe', 'family'] },
@@ -517,15 +514,11 @@
       { label: "Gatorade Tourney (day 2) · all day", type: 'kids', people: ['alayna'] },
     ],
     '2026-08-23': [{ label: "Gatorade Tourney (day 3) · all day", type: 'kids', people: ['alayna'] }],
-    '2026-08-24': [{ label: "Soccer practice 5–6:30 PM · location TBD (arrive 4:45)", type: 'kids', people: ['alayna'] }],
     '2026-08-26': [
       { label: "Jules tutor 11 AM (online)", type: 'tutor', people: ['jules'] },
-      { label: "Soccer practice 5–6:30 PM · location TBD (arrive 4:45)", type: 'kids', people: ['alayna'] },
     ],
     '2026-08-29': [{ label: "Hattie's 7th bday 11 AM–1 PM · LovePeaceThreads, Milford", type: 'kids', href: '#invite-hattie', people: ['ali'] }],
-    '2026-08-31': [{ label: "Soccer practice 5–6:30 PM · location TBD (arrive 4:45)", type: 'kids', people: ['alayna'] }],
-    '2026-09-07': [{ label: "Soccer practice 5–6:30 PM · location TBD (arrive 4:45) — Labor Day, confirm it's on", type: 'kids', people: ['alayna'] }],
-    '2026-09-09': [{ label: "Soccer practice 5–6:30 PM · location TBD (arrive 4:45)", type: 'kids', people: ['alayna'] }],
+    '2026-09-07': [{ label: "Labor Day — confirm soccer practice is actually on", type: 'note', people: ['alayna'] }],
     '2026-09-11': [{ label: "Lightning Cup (day 1) · all day", type: 'kids', people: ['alayna'] }],
     '2026-09-12': [{ label: "Lightning Cup (day 2) · all day", type: 'kids', people: ['alayna'] }],
     '2026-09-13': [{ label: "Lightning Cup (day 3) · all day", type: 'kids', people: ['alayna'] }],
@@ -587,6 +580,11 @@
   const SCHOOL_STARTS = new Date(2026, 7, 31);   // Mon Aug 31, 2026
   const ymcaStart = new Date(2026, 6, 29);       // from today
 
+  // Alayna — soccer practice, Mon & Wed 5–6:30 PM (arrive 4:45).
+  // Change these two dates to reflow the whole run.
+  const SOCCER_START = new Date(2026, 7, 12);    // Wed Aug 12, 2026
+  const SOCCER_END   = new Date(2026, 9, 28);    // Wed Oct 28, 2026
+
   // Jules — cheer practice, Mon–Thu 6–9 PM.
   // Start/end are placeholders until the TeamSnap schedule lands — change these two.
   const CHEER_START = new Date(2026, 7, 3);      // Mon Aug 3, 2026
@@ -616,6 +614,10 @@
     const cheerDay = date < SCHOOL_STARTS ? (dow >= 1 && dow <= 4) : (dow >= 2 && dow <= 4);
     if (date >= CHEER_START && date <= CHEER_END && cheerDay) {
       out.push({ label: "Jules cheer 6–9 PM", type: 'cheer', people: ['jules'] });
+    }
+    // Alayna — soccer practice, Mon & Wed. Adjust SOCCER_START / SOCCER_END to reflow.
+    if (date >= SOCCER_START && date <= SOCCER_END && (dow === 1 || dow === 3)) {
+      out.push({ label: "Alayna soccer 5–6:30 PM (arrive 4:45)", type: 'kids', people: ['alayna'] });
     }
     return out.filter(e => passes(e.people));
   }
