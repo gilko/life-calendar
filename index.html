@@ -548,6 +548,11 @@
   const SOCCER_START = new Date(2026, 7, 12);    // Wed Aug 12, 2026
   const SOCCER_END   = new Date(2026, 9, 28);    // Wed Oct 28, 2026
 
+  // Ali — softball signup, open all November.
+  // Change these two dates to reflow the reminder.
+  const SOFTBALL_SIGNUP_START = new Date(2026, 10, 1);   // Sun Nov 1, 2026
+  const SOFTBALL_SIGNUP_END   = new Date(2026, 10, 30);  // Mon Nov 30, 2026
+
   // Jules — cheer practice, Mon–Thu 6–8 PM.
   // Start/end are placeholders until the TeamSnap schedule lands — change these two.
   const CHEER_START = new Date(2026, 7, 3);      // Mon Aug 3, 2026
@@ -581,6 +586,10 @@
     // Alayna — soccer practice, Mon & Wed. Adjust SOCCER_START / SOCCER_END to reflow.
     if (date >= SOCCER_START && date <= SOCCER_END && (dow === 1 || dow === 3)) {
       out.push({ label: "Alayna soccer 5–6:30 PM (arrive 4:45)", type: 'kids', people: ['alayna'] });
+    }
+    // Ali — softball signup reminder, every day the window is open.
+    if (date >= SOFTBALL_SIGNUP_START && date <= SOFTBALL_SIGNUP_END) {
+      out.push({ label: "Ali softball signup open", type: 'note', people: ['ali'] });
     }
     return out.filter(e => passes(e.people));
   }
@@ -633,7 +642,8 @@
 
   function renderCalendar() {
     document.getElementById('months').innerHTML =
-      buildMonth(2026, 6) + buildMonth(2026, 7) + buildMonth(2026, 8) + buildMonth(2026, 9);
+      buildMonth(2026, 6) + buildMonth(2026, 7) + buildMonth(2026, 8) + buildMonth(2026, 9) +
+      buildMonth(2026, 10);
   }
   renderCalendar();
 
