@@ -559,6 +559,11 @@
   const SOFTBALL_SIGNUP_START = new Date(2026, 10, 1);   // Sun Nov 1, 2026
   const SOFTBALL_SIGNUP_END   = new Date(2026, 10, 30);  // Mon Nov 30, 2026
 
+  // Household — reverse osmosis filter change, once a year in September.
+  // Repeats on this month/day every year; change the day to move it.
+  const RO_FILTER_MONTH = 8;    // September (months are 0-indexed)
+  const RO_FILTER_DAY   = 19;   // Sat Sep 19, 2026
+
   // Jules — cheer practice, Mon–Thu 6–8 PM.
   // Start/end are placeholders until the TeamSnap schedule lands — change these two.
   const CHEER_START = new Date(2026, 7, 3);      // Mon Aug 3, 2026
@@ -598,6 +603,10 @@
     // Ali — softball signup reminder, every day the window is open.
     if (date >= SOFTBALL_SIGNUP_START && date <= SOFTBALL_SIGNUP_END) {
       out.push({ label: "Ali softball signup open", type: 'note', people: ['ali'] });
+    }
+    // Household — reverse osmosis filter change, every year in September.
+    if (date.getMonth() === RO_FILTER_MONTH && date.getDate() === RO_FILTER_DAY) {
+      out.push({ label: "Reverse osmosis filter change (annual)", type: 'note', people: ['gabe', 'steph'] });
     }
     return out.filter(e => passes(e.people));
   }
