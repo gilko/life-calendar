@@ -617,6 +617,11 @@
   const RO_FILTER_MONTH = 8;    // September (months are 0-indexed)
   const RO_FILTER_DAY   = 19;   // Sat Sep 19, 2026
 
+  // Household — insurance change reminders, shown every day of the month.
+  // Change the year/month pairs to move them (months are 0-indexed).
+  const AUTO_INS_YEAR = 2027, AUTO_INS_MONTH = 0;       // all of January 2027
+  const SNOW_INS_YEAR = 2027, SNOW_INS_MONTH = 8;       // all of September 2027
+
   // Jules — cheer practice, Mon–Thu 6–8 PM.
   // Start/end are placeholders until the TeamSnap schedule lands — change these two.
   const CHEER_START = new Date(2026, 7, 3);      // Mon Aug 3, 2026
@@ -660,6 +665,13 @@
     // Household — reverse osmosis filter change, every year in September.
     if (date.getMonth() === RO_FILTER_MONTH && date.getDate() === RO_FILTER_DAY) {
       out.push({ label: "Reverse osmosis filter change (annual)", type: 'note', people: ['gabe', 'steph'] });
+    }
+    // Household — insurance change reminders, every day of their month.
+    if (date.getFullYear() === AUTO_INS_YEAR && date.getMonth() === AUTO_INS_MONTH) {
+      out.push({ label: "Change auto insurance", type: 'note', people: ['gabe', 'steph'] });
+    }
+    if (date.getFullYear() === SNOW_INS_YEAR && date.getMonth() === SNOW_INS_MONTH) {
+      out.push({ label: "Change snowmobile insurance", type: 'note', people: ['gabe', 'steph'] });
     }
     return out.filter(e => passes(e.people));
   }
@@ -711,9 +723,13 @@
   }
 
   function renderCalendar() {
-    document.getElementById('months').innerHTML =
-      buildMonth(2026, 6) + buildMonth(2026, 7) + buildMonth(2026, 8) + buildMonth(2026, 9) +
-      buildMonth(2026, 10);
+    // Jul 2026 through Sep 2027 — bump CAL_END to show later months.
+    const CAL_START = new Date(2026, 6, 1), CAL_END = new Date(2027, 8, 1);
+    let html = '';
+    for (let m = new Date(CAL_START); m <= CAL_END; m.setMonth(m.getMonth() + 1)) {
+      html += buildMonth(m.getFullYear(), m.getMonth());
+    }
+    document.getElementById('months').innerHTML = html;
   }
   renderCalendar();
 
