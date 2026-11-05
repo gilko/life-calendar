@@ -630,6 +630,12 @@
   const CHEER_START = new Date(2026, 7, 3);      // Mon Aug 3, 2026
   const CHEER_END   = new Date(2026, 8, 30);     // Wed Sep 30, 2026
 
+  // Jules — Cricket drop-off/pickup: Wed PM, Thu AM + PM, and every other Fri AM.
+  // Runs open-ended from these dates; add YYYY-MM-DD strings to CRICKET_SKIP to drop a day.
+  const CRICKET_START     = new Date(2026, 10, 5);   // Thu Nov 5, 2026
+  const CRICKET_FRI_START = new Date(2026, 10, 6);   // Fri Nov 6, 2026 — then every 2nd Friday
+  const CRICKET_SKIP      = [];
+
   function eventsFor(date) {
     const out = (events[key(date)] || []).slice();
     if (date >= campStart && date <= campEnd) {
@@ -661,6 +667,15 @@
     const cheerDay = date < SCHOOL_STARTS ? (dow >= 1 && dow <= 4) : (dow >= 2 && dow <= 4);
     if (date >= CHEER_START && date <= CHEER_END && cheerDay) {
       out.push({ label: "Jules cheer 6–8 PM", type: 'cheer', people: ['jules'] });
+    }
+    // Jules — Cricket drop-off/pickup. Adjust CRICKET_START / CRICKET_FRI_START above.
+    if (date >= CRICKET_START && !CRICKET_SKIP.includes(key(date))) {
+      if (dow === 3) out.push({ label: "Cricket drop/pickup (PM)", type: 'note', people: ['jules'] });
+      if (dow === 4) out.push({ label: "Cricket drop/pickup (AM + PM)", type: 'note', people: ['jules'] });
+      const weeksFromFri = Math.round((date - CRICKET_FRI_START) / (7 * 864e5));
+      if (dow === 5 && date >= CRICKET_FRI_START && weeksFromFri % 2 === 0) {
+        out.push({ label: "Cricket drop/pickup (AM)", type: 'note', people: ['jules'] });
+      }
     }
     // Alayna — soccer practice, Mon & Wed. Adjust SOCCER_START / SOCCER_END to reflow.
     if (date >= SOCCER_START && date <= SOCCER_END && (dow === 1 || dow === 3)) {
